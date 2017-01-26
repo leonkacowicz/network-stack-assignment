@@ -1,0 +1,58 @@
+Introdução:
+O objetivo deste trabalho é implementar a transmissão e recepção de quadros, sem conexão e
+sem confirmação, utlizando os serviços da camada MAC do nível de Enlace em um meio artificialmente ruidoso.
+Este nível é responsável pela delimitação de quadros, detecção de erro e controle de acesso ao meio.
+Na delimitação de quadros, utilizaremos o princípio de Contagem de Caracteres, na qual
+consiste em incluir no cabeçalho do quadro um byte indicando o número de caracteres de dados no
+mesmo. Como este caracter tem tamanho igual a um byte, o tamanho máximo da mensagem é de 255
+bytes; o tamanho mínimo é de 20 bytes: caso a mensagem seja menor, os bytes restantes são
+preenchidos com um lixo.
+Na detecção de erro, utlizaremos um campo especial no final da mensagem denominado de FCS
+(Frame Check Sequence), na qual consiste em uma operação de ou-exclusivo com todos os bytes do
+quadro.
+No controle de acesso ao meio, utilizaremos o protocolo CSMA_CD. Este protocolo consiste
+em otimizar o tempo gasto caso haja colisão entre quadros. Neste caso, o próprio transmissor ouve seu
+sinal e irá parar de transmitir caso detecte uma colisão. A colisão é detectada quando um byte enviado
+for diferente do recebido pelo transmissor ou caso haja mais dados recebidos do que transmitidos. Caso
+haja colisão, o transmissor espera um tempo de backoff mais um tempo aleatório para mandar o
+quadro, e se houver colisão nas próximas 10 tentativas, este tempo é dobrado, e mantido nas sequintes
+5 tentativas (após da 10a). Na 16a tentativa, quadro é descartado.
+Dificuldades e Soluções
+A maior dificuldade está na implementação dos conceitos, principalmente no que diz respeito ao clock
+(necessário para verificar o tempo ente cada byte e espera aleatória).
+
+Instruções para o Uso e Execução do Programa
+- Compilação e execução
+Para executar o programa, precisamos compilar via makefile. Digite o seguinte comando na
+pasta do trabalho 2:
+> make
+Para executar, digite:
+> ./main
+
+- Comandos:
+'q' : Sai do programa.
+'[' : Envia a string pré-definida “puc-rio”.
+']' : Envia a stirng pré-definida “Este eh o nosso trabalho 2 de redes. Parece que tudo esta
+funcionando perfeitamente.”
+Obs: Caso deseje, pode aumentar a mensagem digitando mais caracteres e depois <enter>.
+'+' : Aumenta a probabilidade de erro.
+'-' : Diminui a probabilidade de erro.
+'>' : Aumenta a probabilidade de perda de quadro.
+'<' : Diminui a probabilidade de perda de quadro.'!' : Endereço de broadcast.
+<enter> : envia o quadro digitado ou confirma comandos como endereço de destino e endereço
+local.
+Conclusão:
+Através deste trabalho, pudemos entender o funcionamento da camada MAC do nível de
+Enlace, através da transmissão e recepção de bytes, que juntos formam um quadro. Pudemos também
+compreender melhor os serviços fornecidos por este nível, como detecção de erros, delimitação de
+quadros e o controle de acesso ao meio.
+Antes de enviar um novo quadro, é necessário escutar o meio para ver se já tem alguém
+transmitindo. Só transmite caso o meio esteja desocupado. Se por acaso ocorrer uma colisão, são
+realizadas algumas tentativas de retransmissão.
+Para controlar o fim da recepeção de um quadro é utilizado um tempo máximo de recepção
+entre cada byte. E, para verificar a integridade da informação contida na mensagem, deve-se fazer um
+controle de erro. Para isso, é inserido um campo no final do quadro ao enviar e seu conteúdo é
+verificado ao receber.
+No protocolo CSMA_CD, é necessário um tamanho mínimo de quadro para ser possível
+detectar uma colisão por mais de uma estação. Esse tamanho deve ser calculado levando em conta a
+taxa de transmissão da rede e seu tempo de propagação no meio.
